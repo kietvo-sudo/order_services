@@ -1,0 +1,65 @@
+####################################
+# GLOBAL RULES (ALL LANGUAGES)
+####################################
+- Write production-ready code only
+- Prioritize readability over cleverness
+- Prefer explicit logic over magic
+- Keep functions small and focused
+- Use meaningful variable and function names
+- Avoid duplication (DRY)
+- Validate all inputs
+- Handle errors explicitly
+- Explain the approach briefly before showing code
+- If requirements are unclear, ask before coding
+
+####################################
+# PYTHON CORE RULES
+####################################
+- Use Python 3.10+
+- Follow PEP8 strictly
+- Use type hints for all functions and methods
+- Avoid dynamic typing unless clearly justified
+- Prefer standard library solutions
+- Avoid global state
+- Write code that is easy to test
+
+####################################
+# BACKEND / API (FastAPI or similar)
+####################################
+- Use async/await for I/O-bound operations
+- Do not put business logic in controllers/routers
+- Separate router, service, and repository layers
+- Use Pydantic for request and response schemas
+- Return consistent API response structures
+- Do not leak internal errors to clients
+
+####################################
+# DATABASE & DATA HANDLING
+####################################
+- Validate data before persistence
+- Handle transactions explicitly
+- Avoid unindexed or full-scan queries
+- Do not hardcode credentials or secrets
+
+####################################
+# ERROR HANDLING & LOGGING
+####################################
+- Fail fast with clear error messages
+- Do not silently ignore exceptions
+- Log errors with enough context for debugging
+- Do not log sensitive data
+
+####################################
+# TESTING & QUALITY
+####################################
+- Write pytest tests for business logic
+- Use Arrange-Act-Assert pattern
+- Mock external services and I/O
+- Tests must be deterministic
+
+####################################
+# OUTPUT RULES (AI RESPONSE)
+####################################
+- Provide complete, runnable code examples
+- Do not omit important parts
+- Avoid pseudo-code unless explicitly requested
