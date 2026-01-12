@@ -29,7 +29,7 @@ class Order(Base):
     )
     order_code: Mapped[str] = mapped_column(String(50), nullable=False)
 
-    customer_id: Mapped[str] = mapped_column(String(50), nullable=False)
+    customer_id: Mapped[str] = mapped_column(String(50), nullable=False, default="")
     customer_name: Mapped[str] = mapped_column(String(255), nullable=False)
     customer_phone: Mapped[str] = mapped_column(String(30), nullable=False)
     customer_email: Mapped[Optional[str]] = mapped_column(String(255))
@@ -44,9 +44,9 @@ class Order(Base):
 
     shipping_order_code: Mapped[Optional[str]] = mapped_column(String(100))
     shipping_status: Mapped[str] = mapped_column(String(30), default="NOT_CREATED")
-    receiver_name: Mapped[str] = mapped_column(String(255), nullable=False)
-    receiver_phone: Mapped[str] = mapped_column(String(30), nullable=False)
-    receiver_address: Mapped[str] = mapped_column(String(500), nullable=False)
+    receiver_name: Mapped[Optional[str]] = mapped_column(String(255))
+    receiver_phone: Mapped[Optional[str]] = mapped_column(String(30))
+    receiver_address: Mapped[Optional[str]] = mapped_column(String(500))
     shipper: Mapped[Optional[dict]] = mapped_column(JSONB)
     estimated_delivery_time: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
     delivered_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
@@ -66,6 +66,25 @@ class Order(Base):
     )
 
 
+class Product(Base):
+    __tablename__ = "products"
+
+    id: Mapped[str] = mapped_column(String(50), primary_key=True)
+    name: Mapped[str] = mapped_column(String(255), nullable=False)
+    description: Mapped[Optional[str]] = mapped_column(String(1000))
+    price: Mapped[float] = mapped_column(Float, nullable=False)
+    currency: Mapped[str] = mapped_column(String(10), default="VND")
+    stock: Mapped[int] = mapped_column(Integer, default=0)
+    status: Mapped[str] = mapped_column(String(30), default="ACTIVE")
+    
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), default=datetime.utcnow
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), default=datetime.utcnow, onupdate=datetime.utcnow
+    )
+
+
 class OrderItem(Base):
     __tablename__ = "order_items"
 
@@ -73,11 +92,14 @@ class OrderItem(Base):
     order_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("orders.id", ondelete="CASCADE"), nullable=False
     )
-    product_id: Mapped[str] = mapped_column(String(50), nullable=False)
-    product_name: Mapped[str] = mapped_column(String(255), nullable=False)
+    product_id: Mapped[str] = mapped_column(
+        String(50), ForeignKey("products.id"), nullable=False
+    )
     quantity: Mapped[int] = mapped_column(Integer, nullable=False)
+    # Store price snapshot at order time for audit trail
     unit_price: Mapped[float] = mapped_column(Float, nullable=False)
     total_price: Mapped[float] = mapped_column(Float, nullable=False)
 
     order: Mapped[Order] = relationship("Order", back_populates="items")
+    product: Mapped["Product"] = relationship("Product")
 

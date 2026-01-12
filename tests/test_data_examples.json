@@ -1,0 +1,181 @@
+{
+  "metadata": {
+    "description": "합성 테스트 데이터 예제 - 프로덕션 데이터와 완전히 분리된 가짜 데이터",
+    "generated_at": "2024-01-01T00:00:00Z",
+    "privacy_compliant": true,
+    "usage": "자동화된 테스트 전용"
+  },
+  "products": [
+    {
+      "id": "TEST-PROD-A1B2",
+      "name": "Test Product Widget",
+      "description": "Synthetic test product for automated testing purposes only.",
+      "price": 125000.0,
+      "currency": "VND",
+      "stock": 450,
+      "status": "ACTIVE",
+      "created_at": "2024-01-01T10:00:00Z",
+      "updated_at": "2024-01-01T10:00:00Z"
+    },
+    {
+      "id": "TEST-PROD-C3D4",
+      "name": "Test Product Gadget",
+      "description": "Another synthetic test product. Not related to any real product.",
+      "price": 250000.0,
+      "currency": "VND",
+      "stock": 200,
+      "status": "ACTIVE",
+      "created_at": "2024-01-01T10:05:00Z",
+      "updated_at": "2024-01-01T10:05:00Z"
+    },
+    {
+      "id": "TEST-PROD-E5F6",
+      "name": "Test Product Tool",
+      "description": "Fake product data for testing. Completely synthetic.",
+      "price": 75000.0,
+      "currency": "VND",
+      "stock": 0,
+      "status": "INACTIVE",
+      "created_at": "2024-01-01T10:10:00Z",
+      "updated_at": "2024-01-01T10:10:00Z"
+    }
+  ],
+  "customers": [
+    {
+      "name": "TestUser_ABCD",
+      "phone": "9123456789",
+      "email": "testuser_abcd@testdata.example"
+    },
+    {
+      "name": "TestUser_EFGH",
+      "phone": "9876543210",
+      "email": "testuser_efgh@testdata.example"
+    },
+    {
+      "name": "TestUser_IJKL",
+      "phone": "9555555555",
+      "email": "testuser_ijkl@testdata.example"
+    }
+  ],
+  "orders": [
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440000",
+      "orderCode": "TEST-ORD-20240101-ABCD",
+      "customer": {
+        "name": "TestUser_MNOP",
+        "phone": "9111111111",
+        "email": "testuser_mnop@testdata.example"
+      },
+      "items": [
+        {
+          "id": 1,
+          "productId": "TEST-PROD-A1B2",
+          "productName": "Test Product Widget",
+          "quantity": 2,
+          "unitPrice": 125000.0,
+          "totalPrice": 250000.0
+        }
+      ],
+      "pricing": {
+        "subTotal": 250000.0,
+        "shippingFee": 15000.0,
+        "discount": 0.0,
+        "totalAmount": 265000.0,
+        "currency": "VND"
+      },
+      "shipping": {
+        "shippingOrderCode": "TEST-SHIP-XYZ1",
+        "status": "CREATED",
+        "address": {
+          "receiverName": "TestUser_MNOP",
+          "receiverPhone": "9111111111",
+          "fullAddress": "Test Address: 123 Fake Street, Test City"
+        },
+        "shipper": null,
+        "estimatedDeliveryTime": "2024-01-05T10:00:00Z",
+        "deliveredAt": null,
+        "failedReason": null
+      },
+      "orderStatus": "CONFIRMED",
+      "paymentMethod": "COD",
+      "paymentStatus": "PENDING",
+      "createdAt": "2024-01-01T10:15:00Z",
+      "updatedAt": "2024-01-01T10:15:00Z"
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440001",
+      "orderCode": "TEST-ORD-20240101-EFGH",
+      "customer": {
+        "name": "TestUser_QRST",
+        "phone": "9222222222",
+        "email": "testuser_qrst@testdata.example"
+      },
+      "items": [
+        {
+          "id": 2,
+          "productId": "TEST-PROD-C3D4",
+          "productName": "Test Product Gadget",
+          "quantity": 1,
+          "unitPrice": 250000.0,
+          "totalPrice": 250000.0
+        },
+        {
+          "id": 3,
+          "productId": "TEST-PROD-A1B2",
+          "productName": "Test Product Widget",
+          "quantity": 3,
+          "unitPrice": 125000.0,
+          "totalPrice": 375000.0
+        }
+      ],
+      "pricing": {
+        "subTotal": 625000.0,
+        "shippingFee": 20000.0,
+        "discount": 50000.0,
+        "totalAmount": 595000.0,
+        "currency": "VND"
+      },
+      "shipping": {
+        "shippingOrderCode": "TEST-SHIP-XYZ2",
+        "status": "DELIVERING",
+        "address": {
+          "receiverName": "TestUser_QRST",
+          "receiverPhone": "9222222222",
+          "fullAddress": "Test Address: 456 Synthetic Avenue, Mock City"
+        },
+        "shipper": {
+          "shipperId": "TEST-SHIPPER-ABC1",
+          "name": "TestShipper_XYZ",
+          "phone": "9333333333",
+          "vehicleType": "motorbike"
+        },
+        "estimatedDeliveryTime": "2024-01-03T14:00:00Z",
+        "deliveredAt": null,
+        "failedReason": null
+      },
+      "orderStatus": "CONFIRMED",
+      "paymentMethod": "BANK_TRANSFER",
+      "paymentStatus": "PAID",
+      "createdAt": "2024-01-01T10:20:00Z",
+      "updatedAt": "2024-01-01T10:20:00Z"
+    }
+  ],
+  "external_status_updates": [
+    {
+      "orderStatus": "COMPLETED",
+      "paymentStatus": null,
+      "shippingStatus": "DELIVERED",
+      "shippingOrderCode": "TEST-SHIP-XYZ3",
+      "shipper": {
+        "shipperId": "TEST-SHIPPER-DEF2",
+        "name": "TestShipper_ABC",
+        "phone": "9444444444",
+        "vehicleType": "car"
+      },
+      "estimatedDeliveryTime": null,
+      "deliveredAt": "2024-01-02T15:30:00Z",
+      "failedReason": null
+    }
+  ]
+}
+

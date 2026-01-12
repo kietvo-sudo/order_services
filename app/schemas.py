@@ -5,8 +5,39 @@ from typing import List, Optional
 from pydantic import BaseModel, EmailStr, Field
 
 
+class ProductBase(BaseModel):
+    name: str
+    description: Optional[str] = None
+    price: float = Field(..., ge=0)
+    currency: str = "VND"
+    stock: int = Field(default=0, ge=0)
+    status: str = Field(default="ACTIVE", description="ACTIVE | INACTIVE")
+
+
+class ProductCreate(ProductBase):
+    pass  # orderCode will be auto-generated
+
+
+class ProductOut(ProductBase):
+    id: str
+    createdAt: datetime = Field(alias="created_at")
+    updatedAt: datetime = Field(alias="updated_at")
+
+    class Config:
+        from_attributes = True
+        populate_by_name = True
+
+
+class ProductUpdate(BaseModel):
+    name: Optional[str] = None
+    description: Optional[str] = None
+    price: Optional[float] = Field(None, ge=0)
+    currency: Optional[str] = None
+    stock: Optional[int] = Field(None, ge=0)
+    status: Optional[str] = Field(None, description="ACTIVE | INACTIVE")
+
+
 class Customer(BaseModel):
-    customerId: str = Field(..., max_length=50)
     name: str
     phone: str
     email: Optional[EmailStr] = None
@@ -14,10 +45,7 @@ class Customer(BaseModel):
 
 class OrderItemCreate(BaseModel):
     productId: str
-    productName: str
     quantity: int = Field(..., gt=0)
-    unitPrice: float = Field(..., ge=0)
-    totalPrice: float = Field(..., ge=0)
 
 
 class Pricing(BaseModel):
@@ -29,9 +57,9 @@ class Pricing(BaseModel):
 
 
 class Address(BaseModel):
-    receiverName: str
-    receiverPhone: str
-    fullAddress: str
+    receiverName: Optional[str] = None
+    receiverPhone: Optional[str] = None
+    fullAddress: Optional[str] = None
 
 
 class Shipper(BaseModel):
@@ -49,7 +77,7 @@ class Shipping(BaseModel):
         default="NOT_CREATED",
         description="NOT_CREATED | CREATED | PICKED | DELIVERING | DELIVERED | FAILED | CANCELLED",
     )
-    address: Address
+    address: Optional[Address] = None
     shipper: Optional[Shipper] = None
     estimatedDeliveryTime: Optional[datetime] = None
     deliveredAt: Optional[datetime] = None
@@ -57,7 +85,6 @@ class Shipping(BaseModel):
 
 
 class OrderBase(BaseModel):
-    orderCode: str
     customer: Customer
     items: List[OrderItemCreate]
     pricing: Pricing
@@ -70,22 +97,17 @@ class OrderBase(BaseModel):
     paymentStatus: str = "PENDING"
 
 
-class OrderCreate(OrderBase):
-    pass
+class OrderCreate(BaseModel):
+    """Create order with only customer and items. Other fields will be auto-generated."""
+    customer: Customer
+    items: List[OrderItemCreate]
+    # orderCode will be auto-generated
+    # pricing, shipping, orderStatus, paymentMethod, paymentStatus will be auto-generated
 
 
 class OrderUpdate(BaseModel):
-    orderStatus: Optional[str] = None
-    paymentStatus: Optional[str] = None
-    shippingStatus: Optional[str] = Field(
-        default=None,
-        description="NOT_CREATED | CREATED | PICKED | DELIVERING | DELIVERED | FAILED | CANCELLED",
-    )
-    shippingOrderCode: Optional[str] = None
-    shipper: Optional[Shipper] = None
-    estimatedDeliveryTime: Optional[datetime] = None
-    deliveredAt: Optional[datetime] = None
-    failedReason: Optional[str] = None
+    """Update order - only orderStatus can be updated."""
+    orderStatus: str
 
 
 class OrderItemOut(BaseModel):
@@ -117,26 +139,12 @@ class OrderOut(BaseModel):
         from_attributes = True
 
 
-class OrderStatusOut(BaseModel):
-    orderCode: str
-    orderStatus: str
-    paymentStatus: str
-    shippingStatus: str
-    shippingOrderCode: Optional[str] = None
-    customer: Customer
-    pricing: Pricing
-    createdAt: datetime
-    updatedAt: datetime
-
-
 class ExternalStatusUpdate(BaseModel):
     """
     Payload for external systems to push status updates.
-    At least one of orderId or orderCode should be provided.
+    order_code is provided in the API path.
+    All status fields are optional, but at least one should be provided.
     """
-
-    orderId: Optional[uuid.UUID] = None
-    orderCode: Optional[str] = None
 
     orderStatus: Optional[str] = None
     paymentStatus: Optional[str] = None
