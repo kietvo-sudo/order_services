@@ -6,7 +6,10 @@ class Settings(BaseSettings):
     # Application settings
     app_name: str = Field(default="order-service", description="Application name")
     app_env: str = Field(default="development", description="Application environment")
-    app_port: int = Field(default=8000, description="Application port")
+    app_port: int = Field(
+        default=8000,
+        description="Application port. Can be overridden by PORT environment variable (used by cloud platforms like Render)."
+    )
     
     # CORS settings
     cors_origins: list[str] = Field(
@@ -73,12 +76,29 @@ class Settings(BaseSettings):
             raise ValueError("db_port must be between 1 and 65535")
         return v
 
-    @field_validator("app_port")
+    @field_validator("app_port", mode="before")
     @classmethod
-    def validate_app_port(cls, v: int) -> int:
-        if not (1 <= v <= 65535):
+    def get_port_from_env(cls, v: int | None) -> int:
+        """
+        Get port from PORT environment variable (used by cloud platforms like Render).
+        Falls back to app_port or default 8000.
+        """
+        import os
+        port_env = os.getenv("PORT")
+        if port_env:
+            try:
+                port = int(port_env)
+                if not (1 <= port <= 65535):
+                    raise ValueError("PORT must be between 1 and 65535")
+                return port
+            except ValueError as e:
+                # If PORT env var is invalid, fall back to app_port
+                pass
+        # Use app_port if provided, otherwise default to 8000
+        port = v if v is not None else 8000
+        if not (1 <= port <= 65535):
             raise ValueError("app_port must be between 1 and 65535")
-        return v
+        return port
 
     @field_validator("cors_origins", "cors_allow_methods", "cors_allow_headers", mode="before")
     @classmethod

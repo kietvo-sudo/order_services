@@ -158,14 +158,24 @@ order_services/
    Note: The application creates tables automatically on startup if they don't exist (see `app/main.py`). For production, use proper migration tools.
 
 5. **Start the application**:
+   
+   **Option 1: Using start script (recommended for production)**:
    ```bash
-   uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+   ./start.sh
+   ```
+   This script automatically uses the `PORT` environment variable if set (for cloud platforms like Render).
+
+   **Option 2: Direct uvicorn command**:
+   ```bash
+   uvicorn app.main:app --reload --host 0.0.0.0 --port ${PORT:-8000}
    ```
 
-   Or using Python directly:
+   **Option 3: Using Python directly**:
    ```bash
-   python -m uvicorn app.main:app --reload
+   python -m uvicorn app.main:app --reload --host 0.0.0.0 --port ${PORT:-8000}
    ```
+
+   **Note**: The `PORT` environment variable is automatically used if set (e.g., on Render, Heroku). Defaults to 8000 if not set.
 
 6. **Access the API**:
    - API Base URL: `http://localhost:8000`
