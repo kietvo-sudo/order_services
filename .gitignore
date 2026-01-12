@@ -57,6 +57,7 @@ docs/api_documents.xlsx
 
 # Temporary documentation files
 *.example
+!env.example  # Keep env.example as template
 .env.cors.example
 
 # Documentation reports (generated)

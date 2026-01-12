@@ -8,13 +8,37 @@ services:
     buildCommand: pip install -r requirements.txt
     startCommand: ./start.sh
     envVars:
-      - key: PORT
-        value: 8000
+      # Application settings
+      - key: APP_NAME
+        value: order-service
       - key: APP_ENV
         value: production
-      # Add your database and CORS settings here
-      # - key: DATABASE_URL
+      # PORT is automatically set by Render, no need to specify
+      
+      # Database - Use Render's PostgreSQL database
+      # Option 1: Use DATABASE_URL (recommended - Render provides this automatically)
+      - key: DATABASE_URL
+        sync: false  # Set this in Render Dashboard from PostgreSQL service
+      
+      # Option 2: Or use individual parameters (if not using DATABASE_URL)
+      # - key: DB_HOST
       #   sync: false
-      # - key: CORS_ORIGINS
-      #   value: "*"
+      # - key: DB_PORT
+      #   value: 5432
+      # - key: DB_USER
+      #   sync: false
+      # - key: DB_PASSWORD
+      #   sync: false
+      # - key: DB_NAME
+      #   sync: false
+      
+      # CORS settings
+      - key: CORS_ORIGINS
+        value: "*"  # Change to specific domains in production
+      - key: CORS_ALLOW_CREDENTIALS
+        value: "false"
+      - key: CORS_ALLOW_METHODS
+        value: "*"
+      - key: CORS_ALLOW_HEADERS
+        value: "*"
 

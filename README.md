@@ -197,68 +197,96 @@ python insert_products.py http://localhost:8000
 
 ## Configuration
 
-The application uses environment variables loaded from a `.env` file. Create a `.env` file in the project root with the following variables:
+The application uses environment variables loaded from a `.env` file. Create a `.env` file in the project root with the following variables.
 
-### Database Configuration
+**Quick Start**: Copy `env.example` to `.env` and fill in your values:
+```bash
+cp env.example .env
+# Then edit .env with your actual values
+```
 
-**Option 1: Using DATABASE_URL (Recommended)**
+### All Environment Variables
+
+#### Application Settings
+```env
+APP_NAME=order-service              # Application name
+APP_ENV=development                 # Environment: development, staging, production
+APP_PORT=8000                       # Application port (default: 8000)
+PORT=8000                           # Used by cloud platforms (Render, Heroku). Overrides APP_PORT if set.
+```
+
+#### Database Configuration
+
+**Option 1: Using DATABASE_URL (Recommended for cloud databases)**
 ```env
 DATABASE_URL=postgresql+psycopg2://user:password@host:port/database?sslmode=require
 ```
 
-**Option 2: Using Individual Parameters**
+**Option 2: Using Individual Parameters** (if DATABASE_URL is not set)
 ```env
-DB_HOST=localhost
-DB_PORT=5432
-DB_USER=your_username
-DB_PASSWORD=your_password
-DB_NAME=order_service_db
+DB_HOST=localhost                   # Database hostname
+DB_PORT=5432                        # Database port
+DB_USER=postgres                    # Database username
+DB_PASSWORD=your_password_here     # Database password
+DB_NAME=orderdb                     # Database name
 ```
 
-### Application Settings
+**Important**: 
+- `DATABASE_URL` takes precedence over individual DB parameters if both are set
+- If `DATABASE_URL` is not set, **all** individual DB parameters (`DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`) are **required**
+
+#### CORS Settings
+```env
+CORS_ORIGINS=*                      # All origins (development) or comma-separated list
+CORS_ALLOW_CREDENTIALS=false       # Allow credentials (must be false if CORS_ORIGINS=*)
+CORS_ALLOW_METHODS=*               # Allowed HTTP methods
+CORS_ALLOW_HEADERS=*               # Allowed HTTP headers
+```
+
+CORS origins can be specified as:
+- `*` for all origins (development only)
+- Comma-separated list: `https://your-frontend.com,https://another-domain.com`
+
+### Complete Example `.env` File
 
 ```env
-# Application name
+# ============================================
+# Application Settings
+# ============================================
 APP_NAME=order-service
-
-# Application environment (development, staging, production)
 APP_ENV=development
-
-# Application port
 APP_PORT=8000
+PORT=8000
 
-# CORS settings (comma-separated or "*" for all)
+# ============================================
+# Database Configuration
+# ============================================
+# Option 1: Using DATABASE_URL (Recommended)
+DATABASE_URL=postgresql+psycopg2://postgres:password@localhost:5432/orderdb
+
+# Option 2: Using Individual Parameters (if DATABASE_URL is not set)
+# DB_HOST=localhost
+# DB_PORT=5432
+# DB_USER=postgres
+# DB_PASSWORD=your_password_here
+# DB_NAME=orderdb
+
+# ============================================
+# CORS Settings
+# ============================================
 CORS_ORIGINS=*
-CORS_ALLOW_CREDENTIALS=true
+CORS_ALLOW_CREDENTIALS=false
 CORS_ALLOW_METHODS=*
 CORS_ALLOW_HEADERS=*
 ```
 
 ### Environment Variable Notes
 
-- All variables are optional with sensible defaults
+- All variables are optional with sensible defaults (except database settings)
+- `PORT` environment variable (from cloud platforms) automatically overrides `APP_PORT`
 - `DATABASE_URL` takes precedence over individual DB parameters if both are set
-- If `DATABASE_URL` is not set, all individual DB parameters (`DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`) are required
-- CORS origins can be specified as:
-  - `*` for all origins (development only)
-  - Comma-separated list: `http://localhost:3000,https://example.com`
-  - JSON array format: `["http://localhost:3000","https://example.com"]`
-
-### Example `.env` File
-
-```env
-# Database
-DATABASE_URL=postgresql+psycopg2://postgres:password@localhost:5432/orderdb
-
-# Application
-APP_NAME=order-service
-APP_ENV=development
-APP_PORT=8000
-
-# CORS
-CORS_ORIGINS=http://localhost:3000,http://localhost:8080
-CORS_ALLOW_CREDENTIALS=true
-```
+- If `DATABASE_URL` is not set, all individual DB parameters are required
+- See `env.example` file for a complete template
 
 ## API Documentation
 
