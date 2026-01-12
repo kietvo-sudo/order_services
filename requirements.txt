@@ -1,0 +1,26 @@
+# Order Services API - Python Dependencies
+# Python 3.11+ required
+
+# Web Framework
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+
+# Database
+sqlalchemy>=2.0.0
+psycopg2-binary>=2.9.0
+
+# Configuration & Settings
+pydantic>=2.0.0
+pydantic-settings>=2.0.0
+python-dotenv>=1.0.0
+
+# HTTP Client
+httpx>=0.25.0
+
+# Type Hints
+typing-extensions>=4.8.0
+
+# Optional: Testing (uncomment if needed)
+# pytest>=7.4.0
+# pytest-mock>=3.12.0
+
